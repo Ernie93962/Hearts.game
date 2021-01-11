@@ -1,4 +1,3 @@
-#this works
 #1=2 13=ace
 #spades 1-13
 #clubs 14-26
