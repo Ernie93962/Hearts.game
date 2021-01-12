@@ -12,6 +12,7 @@ SUITE_CLUBS = 1
 SUITE_HEARTS = 2
 SUITE_DIAMONDS = 3
 
+name = input('Please enter your name: ')
 deck = []
 player0=[]
 player1=[]
@@ -25,7 +26,7 @@ trickPile2 = []
 trickPile3 = []
 trickPiles = [trickPile0,trickPile1,trickPile2,trickPile3]
 scores = []
-playerNames = ['Jim', 'Doug', 'Bob', 'Jerry']
+playerNames = ['Jim', 'Doug', 'Bob', name]
 human = 3
 
 def printCards(cards):
