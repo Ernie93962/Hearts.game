@@ -12,13 +12,14 @@ SUITE_CLUBS = 1
 SUITE_HEARTS = 2
 SUITE_DIAMONDS = 3
 
+playHearts = False
 deck = []
-player0=[]
-player1=[]
-player2=[]
-player3=[]
-players=[player0, player1, player2, player3]
-currentHand=[]
+player0 = []
+player1 = []
+player2 = []
+player3 = []
+players = [player0, player1, player2, player3]
+currentHand = []
 trickPile0 = []
 trickPile1 = []
 trickPile2 = []
@@ -97,6 +98,7 @@ def findTrickWinner(hand):
     return(leader)
 
 def humanPlayCard(player,isFirstcard=False):
+    playHearts = False
     print("Your hand is: ")
     printCards(player)
     print("Current Trick is:")
@@ -115,11 +117,23 @@ def humanPlayCard(player,isFirstcard=False):
             if humanCard in validCards:
                 break
         else:
-            break
+            #not the first player in the round
+            if len(currentHand) != 0:
+                if not playHearts and humanCard >=27 and humanCard <= 39:
+                    playHearts = True
+                    print('you played a heart')
+                break
+            #we are the first player of the round
+            else:
+                if humanCard >=27 and humanCard <= 39 and playHearts == True:
+                    break
+                elif humanCard < 27 or humanCard > 39:
+                    break
     player.remove(humanCard)
     return(humanCard)
 
 def playCard(player,isFirstCard=False):
+    global playHearts
     if isFirstCard:
         player.remove(CLUBS_2)
         return(CLUBS_2)
@@ -128,6 +142,9 @@ def playCard(player,isFirstCard=False):
         suiteCards=getCardsBySuite(player,handSuite)
         if len(suiteCards)==0:
             #testing - just use the first card in their hand
+            if not playHearts and player[0] >= 27 and player[0] <= 39:
+                playHearts = True
+                print('someone played a heart')
             return(player.pop(0))
         else:
             #testing - just use the first found card in the suite
@@ -135,6 +152,14 @@ def playCard(player,isFirstCard=False):
             return(suiteCards[0])
     else:
         #testing - just use the first card in their hand
+        for card in player:
+            if card < 27 or card > 39:
+                player.remove(card)
+                return(card)
+            elif playHearts == True:
+                player.remove(card)
+                return(card)
+        #if we get here all cards must be hearts
         return(player.pop(0))
 
 def convertHumanCard(card):
