@@ -5,6 +5,7 @@
 #diamonds 40-52
 #queen of spades = 11
 import random
+import argparse
 
 CLUBS_2 = 14
 SUITE_SPADES = 0
@@ -82,7 +83,6 @@ def findScore():
                 scores[index] += 1
             elif(card==11):
                 scores[index] += 13
-
 
 def takeTrick(winner,hand):
     for card in hand:
@@ -243,20 +243,18 @@ def shuffleDeck(amount=1):
     for i in range(0,amount):
         shuffle()
 
-def main():
-    random.seed()
-    name = input('Please enter your name: ')
-    playerNames.append(name)
+def getArguments():
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('--test', type = int, default = 0, help='foo help')
 
-    initalizeDeck()
-    shuffleDeck(1000)
-    deal()
+    args = parser.parse_args()
+    return(args)
+
+def playGame():
+    for pile in trickPiles:
+        pile.clear()
+    scores.clear()
     aPlayer = getFirstPlayer()
-    debugString = ''
-    for card in players[aPlayer]:
-        txt = getCardString(card)
-        debugString += txt+' '
-    #print(debugString)
     playedCard = None
     isFirstPlayer = True
     for round in range(0,13):
@@ -283,5 +281,22 @@ def main():
             winner = index
     print('The winner is: ' + playerNames[winner])
 
+def main():
+    global human
+    args = getArguments()
+    if args.test > 0:
+        human = 5
+        print('test')
+
+    random.seed()
+    name = input('Please enter your name: ')
+    playerNames.append(name)
+    initalizeDeck()
+    for i in range(0,args.test+1):
+        shuffleDeck(1000)
+        deal()
+        playGame()
+        pass
+    
 if __name__ == "__main__":
     main()
