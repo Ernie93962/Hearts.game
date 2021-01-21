@@ -1,0 +1,20 @@
+name: test-action
+on:
+  branches:
+    - main
+  schedule:
+      - cron:  '*/15 * * * *'
+
+jobs:
+   unit-test:
+     runs-on: windows-latest
+     steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.9
+      - name: run-program
+      run: |
+        python hearts.py
+       
