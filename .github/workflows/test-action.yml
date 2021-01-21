@@ -15,6 +15,6 @@ jobs:
         with:
           python-version: 3.9
       - name: run-program
-      run: |
-        python hearts.py
+        run: |
+          python hearts.py
        
