@@ -2,10 +2,10 @@ name: test-action
 on:
   schedule:
   - cron:  '*/15 * * * *'
-    branches:
-    - git-actions
-  
+    branches: [ git-actions ]
 
+  workflow_dispatch:
+  
 jobs:
    unit-test:
      runs-on: windows-latest
