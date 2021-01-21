@@ -1,9 +1,10 @@
 name: test-action
 on:
-  branches:
-  - git-actions
   schedule:
   - cron:  '*/15 * * * *'
+    branches:
+    - git-actions
+  
 
 jobs:
    unit-test:
