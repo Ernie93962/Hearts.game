@@ -6,6 +6,9 @@
 #queen of spades = 11
 import random
 import argparse
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 CLUBS_2 = 14
 SUITE_SPADES = 0
