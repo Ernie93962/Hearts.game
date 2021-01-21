@@ -286,11 +286,14 @@ def main():
     args = getArguments()
     if args.test > 0:
         human = 5
-        print('test')
+        playerNames.append('Tester')
+        print('Running Test')
+    else:
+        name = input('Please enter your name: ')
+        playerNames.append(name)
 
     random.seed()
-    name = input('Please enter your name: ')
-    playerNames.append(name)
+
     initalizeDeck()
     for i in range(0,args.test+1):
         shuffleDeck(1000)
