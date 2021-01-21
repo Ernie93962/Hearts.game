@@ -1,9 +1,7 @@
 name: test-action
 on:
-  branches:
-    - main
   schedule:
-      - cron:  '*/15 * * * *'
+  - cron:  '*/15 * * * *'
 
 jobs:
    unit-test:
