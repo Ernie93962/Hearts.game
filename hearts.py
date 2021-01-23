@@ -30,6 +30,31 @@ scores = []
 playerNames = ['Jim', 'Doug', 'Bob']
 human = 3
 
+def getHighestCards(player, cardNumber):
+    highCards = []
+    for i in range(13, 0, -1):
+        if i in player:
+            highCards.append(i)
+        if (i + 13) in player:
+            highCards.append(i + 13)
+        if (i + 26) in player:
+            highCards.append(i + 26)
+        if (i + 39) in player:
+            highCards.append(i + 39)
+        if len(highCards) >= cardNumber:
+            return(highCards[:cardNumber])
+
+def passCards():
+    highCards = []
+    for index,player in enumerate(players):
+        highCards.append(getHighestCards(player, 3))
+        for card in highCards[index]:
+            player.remove(card)
+    players[1] += highCards[0]
+    players[2] += highCards[1]
+    players[3] += highCards[2]
+    players[0] += highCards[3]
+
 def printCards(cards):
     debugString = ''
     for card in cards:
@@ -287,14 +312,17 @@ def main():
     if args.test > 0:
         human = 5
         print('test')
+        name = 'jerry'
+    else:
+        name = input('Please enter your name: ')
 
     random.seed()
-    name = input('Please enter your name: ')
     playerNames.append(name)
     initalizeDeck()
     for i in range(0,args.test+1):
         shuffleDeck(1000)
         deal()
+        passCards()
         playGame()
         pass
     
