@@ -31,25 +31,55 @@ playerNames = ['Jim', 'Doug', 'Bob']
 human = 3
 
 def getHighestCards(player, cardNumber):
+    global player3
     highCards = []
-    for i in range(13, 0, -1):
-        if i in player:
-            highCards.append(i)
-        if (i + 13) in player:
-            highCards.append(i + 13)
-        if (i + 26) in player:
-            highCards.append(i + 26)
-        if (i + 39) in player:
-            highCards.append(i + 39)
-        if len(highCards) >= cardNumber:
-            return(highCards[:cardNumber])
+    if player != player3:
+        for i in range(13, 0, -1):
+            if i in player:
+                highCards.append(i)
+            if (i + 13) in player:
+                highCards.append(i + 13)
+            if (i + 26) in player:
+                highCards.append(i + 26)
+            if (i + 39) in player:
+                highCards.append(i + 39)
+    if player == player3:
+            print("Your hand is: ")
+            printCards(player)
+            while True:
+                humanCard1 = input('Please pass a card: ')
+                highCards.append(convertHumanCard(humanCard1))
+                if convertHumanCard(humanCard1) in player3:
+                    break
+            player3.remove(convertHumanCard(humanCard1))
+            
+            print("Your hand is: ")
+            printCards(player)
+            while True:
+                humanCard2 = input('Please pass a card: ')
+                highCards.append(convertHumanCard(humanCard2))
+                if convertHumanCard(humanCard2) in player3:
+                    break
+            player3.remove(convertHumanCard(humanCard2))
+            
+            print("Your hand is: ")
+            printCards(player)
+            while True:
+                humanCard3 = input('Please pass a card: ')
+                highCards.append(convertHumanCard(humanCard3))
+                if convertHumanCard(humanCard3) in player3:
+                    break
+            player3.remove(convertHumanCard(humanCard3))
+    if len(highCards) >= cardNumber:
+                return(highCards[:cardNumber])
 
 def passCards():
     highCards = []
     for index,player in enumerate(players):
         highCards.append(getHighestCards(player, 3))
-        for card in highCards[index]:
-            player.remove(card)
+        if index != 3:
+            for card in highCards[index]:
+                player.remove(card)
     players[1] += highCards[0]
     players[2] += highCards[1]
     players[3] += highCards[2]
@@ -312,7 +342,7 @@ def main():
     if args.test > 0:
         human = 5
         print('test')
-        name = 'jerry'
+        name = 'Jerry'
     else:
         name = input('Please enter your name: ')
 
