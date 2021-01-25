@@ -182,7 +182,7 @@ def humanPlayCard(player,isFirstcard=False):
             else:
                 if humanCard >=27 and humanCard <= 39 and playHearts == True:
                     break
-                elif humanCard < 27 or humanCard > 39:
+                elif (humanCard < 27 or humanCard > 39) and humanCard in player3:
                     break
     player.remove(humanCard)
     return(humanCard)
