@@ -31,7 +31,6 @@ playerNames = ['Jim', 'Doug', 'Bob']
 human = 3
 
 def getHighestCards(player, cardNumber):
-    global player3
     highCards = []
     if player != player3:
         for i in range(13, 0, -1):
@@ -84,6 +83,7 @@ def passCards():
     players[2] += highCards[1]
     players[3] += highCards[2]
     players[0] += highCards[3]
+    player3.sort()
 
 def printCards(cards):
     debugString = ''
