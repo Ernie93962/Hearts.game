@@ -6,6 +6,7 @@
 #queen of spades = 11
 import random
 import argparse
+import sys
 
 CLUBS_2 = 14
 SUITE_SPADES = 0
@@ -13,6 +14,7 @@ SUITE_CLUBS = 1
 SUITE_HEARTS = 2
 SUITE_DIAMONDS = 3
 
+theMode = False
 playHearts = False
 deck = []
 player0 = []
@@ -29,10 +31,11 @@ trickPiles = [trickPile0,trickPile1,trickPile2,trickPile3]
 scores = []
 playerNames = ['Jim', 'Doug', 'Bob']
 human = 3
+scoreStatistics = [0,0,0,0]
 
 def getHighestCards(player, cardNumber):
     highCards = []
-    if player != player3:
+    if player != player3 or human == 5:
         for i in range(13, 0, -1):
             if i in player:
                 highCards.append(i)
@@ -42,33 +45,33 @@ def getHighestCards(player, cardNumber):
                 highCards.append(i + 26)
             if (i + 39) in player:
                 highCards.append(i + 39)
-    if player == player3:
-            print("Your hand is: ")
-            printCards(player)
-            while True:
-                humanCard1 = input('Please pass a card: ')
-                highCards.append(convertHumanCard(humanCard1))
-                if convertHumanCard(humanCard1) in player3:
-                    break
-            player3.remove(convertHumanCard(humanCard1))
-            
-            print("Your hand is: ")
-            printCards(player)
-            while True:
-                humanCard2 = input('Please pass a card: ')
-                highCards.append(convertHumanCard(humanCard2))
-                if convertHumanCard(humanCard2) in player3:
-                    break
-            player3.remove(convertHumanCard(humanCard2))
-            
-            print("Your hand is: ")
-            printCards(player)
-            while True:
-                humanCard3 = input('Please pass a card: ')
-                highCards.append(convertHumanCard(humanCard3))
-                if convertHumanCard(humanCard3) in player3:
-                    break
-            player3.remove(convertHumanCard(humanCard3))
+    else:
+        print("Your hand is: ")
+        printCards(player)
+        while True:
+            humanCard1 = input('Please pass a card: ')
+            highCards.append(convertHumanCard(humanCard1))
+            if convertHumanCard(humanCard1) in player3:
+                break
+        player3.remove(convertHumanCard(humanCard1))
+        
+        print("Your hand is: ")
+        printCards(player)
+        while True:
+            humanCard2 = input('Please pass a card: ')
+            highCards.append(convertHumanCard(humanCard2))
+            if convertHumanCard(humanCard2) in player3:
+                break
+        player3.remove(convertHumanCard(humanCard2))
+        
+        print("Your hand is: ")
+        printCards(player)
+        while True:
+            humanCard3 = input('Please pass a card: ')
+            highCards.append(convertHumanCard(humanCard3))
+            if convertHumanCard(humanCard3) in player3:
+                break
+        player3.remove(convertHumanCard(humanCard3))
     if len(highCards) >= cardNumber:
                 return(highCards[:cardNumber])
 
@@ -76,7 +79,7 @@ def passCards():
     highCards = []
     for index,player in enumerate(players):
         highCards.append(getHighestCards(player, 3))
-        if index != 3:
+        if index != 3 or human == 5:
             for card in highCards[index]:
                 player.remove(card)
     players[1] += highCards[0]
@@ -138,6 +141,20 @@ def findScore():
                 scores[index] += 1
             elif(card==11):
                 scores[index] += 13
+    if sum(scores) != 26:
+        print("something's wrong")
+        print(scores)
+        quit()
+    if 26 in scores:
+        for index,score in enumerate(scores):
+            if score == 26:
+                scores[index] = 0
+            elif score == 0:
+                scores[index] = 26
+            else:
+                sys.exit("NICE TRY CHEATER!")
+        #print(scores)
+        #sys.exit("Someone ran it")
 
 def takeTrick(winner,hand):
     for card in hand:
@@ -322,7 +339,8 @@ def playGame():
             aPlayer=(aPlayer+1)%4
             isFirstPlayer = False
         trickWinner = findTrickWinner(currentHand)
-        print("Then trick winner is: " + playerNames[trickWinner[0]] + ' [' + playerNames[currentHand[0][0]] + ':' + getCardString(currentHand[0][1]) + ', ' + playerNames[currentHand[1][0]] + ':' + getCardString(currentHand[1][1]) + ', ' + playerNames[currentHand[2][0]] + ':' + getCardString(currentHand[2][1]) + ', ' + playerNames[currentHand[3][0]] + ':' + getCardString(currentHand[3][1]) + ']')
+        if not getTest():
+            print("Then trick winner is: " + playerNames[trickWinner[0]] + ' [' + playerNames[currentHand[0][0]] + ':' + getCardString(currentHand[0][1]) + ', ' + playerNames[currentHand[1][0]] + ':' + getCardString(currentHand[1][1]) + ', ' + playerNames[currentHand[2][0]] + ':' + getCardString(currentHand[2][1]) + ', ' + playerNames[currentHand[3][0]] + ':' + getCardString(currentHand[3][1]) + ']')
         takeTrick(trickWinner[0],currentHand)
         currentHand.clear()
         aPlayer = trickWinner[0]
@@ -330,17 +348,28 @@ def playGame():
     winner = 0
     winnerScore = 26
     for index,score in enumerate(scores):
-        print(playerNames[index]+': '+str(scores[index]))
+        if not getTest():
+            print(playerNames[index]+': '+str(scores[index]))
         if scores[index] < winnerScore:
             winnerScore = scores[index]
             winner = index
     print('The winner is: ' + playerNames[winner])
+    if human == 5:
+        scoreStatistics[winner] += 1
+
+def setTest(mode):
+    global theMode
+    theMode = mode
+
+def getTest():
+    return(theMode)
 
 def main():
     global human
     args = getArguments()
     if args.test > 0:
         human = 5
+        setTest(True)
         print('test')
         name = 'Jerry'
     else:
@@ -355,6 +384,8 @@ def main():
         passCards()
         playGame()
         pass
+    if human == 5:
+        print(scoreStatistics)
     
 if __name__ == "__main__":
     main()
