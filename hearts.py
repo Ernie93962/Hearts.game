@@ -32,6 +32,8 @@ scores = []
 playerNames = ['Jim', 'Doug', 'Bob']
 human = 3
 scoreStatistics = [0,0,0,0]
+timesRun = 0
+dumbDoug = 0
 
 def getHighestCards(player, cardNumber):
     highCards = []
@@ -153,6 +155,8 @@ def findScore():
                 scores[index] = 26
             else:
                 sys.exit("NICE TRY CHEATER!")
+        global timesRun
+        timesRun += 1
         #print(scores)
         #sys.exit("Someone ran it")
 
@@ -204,8 +208,29 @@ def humanPlayCard(player,isFirstcard=False):
     player.remove(humanCard)
     return(humanCard)
 
+def getLeastSuite(player):
+    suiteCount = [0,0,0,0]
+    suite = [0,52]
+    for card in player:
+        cardSuite = getSuite(card)
+        if cardSuite == SUITE_SPADES:
+            suiteCount[0] += 1
+        elif cardSuite == SUITE_CLUBS:
+            suiteCount[1] += 1
+        #elif cardSuite == SUITE_HEARTS:
+            #suiteCount[2] += 1
+        elif cardSuite == SUITE_DIAMONDS:
+            suiteCount[3] += 1
+        else:
+            sys.exit('STOP CHEATING!')
+    for index,leastSuite in enumerate(suiteCount):
+        if leastsuite < suite[1] and suite[1] != 0:
+            suite = [index, leastSutte]
+    return(suite[0])
+
 def playCard(player,isFirstCard=False):
     global playHearts
+    global dumbDoug
     if isFirstCard:
         player.remove(CLUBS_2)
         return(CLUBS_2)
@@ -223,6 +248,11 @@ def playCard(player,isFirstCard=False):
             player.remove(suiteCards[0])
             return(suiteCards[0])
     else:
+        #if 11 in player and player == player1:
+        #    print('dumb doug')
+          #  dumbDoug += 1
+         #   player.remove(11)
+         #   return(11)
         #testing - just use the first card in their hand
         for card in player:
             if card < 27 or card > 39:
@@ -364,6 +394,14 @@ def setTest(mode):
 def getTest():
     return(theMode)
 
+#def makeDougLose():
+    #for player in players:
+        #if 11 in player:
+           # player.remove(11)
+            #player1.append(11)
+            #player.append(player1.pop(0))
+            #break
+
 def main():
     global human
     args = getArguments()
@@ -382,10 +420,13 @@ def main():
         shuffleDeck(1000)
         deal()
         passCards()
+       # makeDougLose()
         playGame()
         pass
     if human == 5:
         print(scoreStatistics)
+        print(timesRun)
+        print(dumbDoug)
     
 if __name__ == "__main__":
     main()
