@@ -48,32 +48,18 @@ def getHighestCards(player, cardNumber):
             if (i + 39) in player:
                 highCards.append(i + 39)
     else:
-        print("Your hand is: ")
-        printCards(player)
-        while True:
-            humanCard1 = input('Please pass a card: ')
-            highCards.append(convertHumanCard(humanCard1))
-            if convertHumanCard(humanCard1) in player3:
-                break
-        player3.remove(convertHumanCard(humanCard1))
+        for p in range(0,3):
+            print("Your hand is: ")
+            printCards(player)
+            while True:
+                humanCard1 = input('Please pass a card: ')
+                if len(humanCard1) < 2:
+                    continue
+                if convertHumanCard(humanCard1) in player3:
+                    highCards.append(convertHumanCard(humanCard1))
+                    break
+            player3.remove(convertHumanCard(humanCard1))
         
-        print("Your hand is: ")
-        printCards(player)
-        while True:
-            humanCard2 = input('Please pass a card: ')
-            highCards.append(convertHumanCard(humanCard2))
-            if convertHumanCard(humanCard2) in player3:
-                break
-        player3.remove(convertHumanCard(humanCard2))
-        
-        print("Your hand is: ")
-        printCards(player)
-        while True:
-            humanCard3 = input('Please pass a card: ')
-            highCards.append(convertHumanCard(humanCard3))
-            if convertHumanCard(humanCard3) in player3:
-                break
-        player3.remove(convertHumanCard(humanCard3))
     if len(highCards) >= cardNumber:
                 return(highCards[:cardNumber])
 
@@ -92,10 +78,8 @@ def passCards():
 
 def printCards(cards):
     debugString = ''
-    for card in cards:
-        txt = getCardString(card)
-        debugString += txt+' '
-    print(debugString)   
+    a = list(map(getCardString,cards))
+    print(debugString.join(a))   
 
 def printCurrentHand(aHand):
     debugString = ''
@@ -133,7 +117,7 @@ def getCardString(card):
         string = 'K' + string
     elif tempCard == 13:
         string = 'A' + string
-    return(string)
+    return(string+' ')
 
 def findScore():
     for index,pile in enumerate(trickPiles):
@@ -185,6 +169,8 @@ def humanPlayCard(player,isFirstcard=False):
         validCards = getCardsBySuite(player,leaderSuite)
     while True:  
         humanCard = input('Play card: ')
+        if len(humanCard) < 2:
+            continue
         humanCard = convertHumanCard(humanCard)
         if isFirstcard:
             if humanCard == 14:
@@ -249,10 +235,10 @@ def playCard(player,isFirstCard=False):
             return(suiteCards[0])
     else:
         #if 11 in player and player == player1:
-        #    print('dumb doug')
-          #  dumbDoug += 1
-         #   player.remove(11)
-         #   return(11)
+            #print('dumb doug')
+            #dumbDoug += 1
+            #player.remove(11)
+            #return(11)
         #testing - just use the first card in their hand
         for card in player:
             if card < 27 or card > 39:
@@ -261,6 +247,7 @@ def playCard(player,isFirstCard=False):
             elif playHearts == True:
                 player.remove(card)
                 return(card)
+
         #if we get here all cards must be hearts
         return(player.pop(0))
 
