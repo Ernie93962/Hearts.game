@@ -22,7 +22,7 @@ player1 = []
 player2 = []
 player3 = []
 players = [player0, player1, player2, player3]
-currentHand = []
+currentHand = [] # list: [player, card]
 trickPile0 = []
 trickPile1 = []
 trickPile2 = []
@@ -62,6 +62,28 @@ def getHighestCards(player, cardNumber):
         
     if len(highCards) >= cardNumber:
                 return(highCards[:cardNumber])
+
+def getLowestCards():
+    lowestCard = 52
+    for trick in currentHand:
+        if trick[1] < lowestCard and getSuite(trick[1]) == getTrickSuite():
+            lowestCard = trick[1]
+    return(lowestCard)
+
+def getTrickSuite():
+    if len(currentHand) > 0:
+        return(getSuite(currentHand[0][1]))
+    return(None)
+
+def getLowerThan(target, cardList):
+    closestCard = 52
+    mostDifference = 52
+    for card in cardList:
+        if (target-card) < mostDifference:
+            closestCard = card
+            mostDifference = target-card
+    return(closestCard)
+
 
 def passCards():
     highCards = []
@@ -210,8 +232,8 @@ def getLeastSuite(player):
         else:
             sys.exit('STOP CHEATING!')
     for index,leastSuite in enumerate(suiteCount):
-        if leastsuite < suite[1] and suite[1] != 0:
-            suite = [index, leastSutte]
+        if leastSuite < suite[1] and suite[1] != 0:
+            suite = [index, leastSuite]
     return(suite[0])
 
 def playCard(player,isFirstCard=False):
@@ -231,8 +253,10 @@ def playCard(player,isFirstCard=False):
             return(player.pop(0))
         else:
             #testing - just use the first found card in the suite
-            player.remove(suiteCards[0])
-            return(suiteCards[0])
+            lowCard = getLowestCards()
+            closeCard = getLowerThan(lowCard, suiteCards)
+            player.remove(closeCard)
+            return(closeCard)
     else:
         #if 11 in player and player == player1:
             #print('dumb doug')
