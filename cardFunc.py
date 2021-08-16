@@ -129,8 +129,8 @@ def passCards(players, human):
     highCards = []
     for index,player in enumerate(players):
         highCards.append(getHighestCards(player, 3))
-        if index == 3:
-            getHumanPassCards(player, 3)
+        #if index == 3:
+            #getHumanPassCards(player, 3)
         if index != 3 or human == 5:
             for card in highCards[index]:
                 player.remove(card)

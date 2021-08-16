@@ -250,6 +250,9 @@ def getTest():
             #player.append(player1.pop(0))
             #break
 
+def getPlayerHands():
+    return(players)
+
 def main():
     global human
     args = getArguments()
@@ -259,7 +262,7 @@ def main():
         print('test')
         name = 'Jerry'
     else:
-        name = input('Please enter your name: ')
+        name = 'You'
 
     random.seed()
     playerNames.append(name)
@@ -269,7 +272,7 @@ def main():
         cards.deal(players)
         cards.passCards(players, human)
        # makeDougLose()
-        playGame()
+        #playGame()
         pass
     if human == 5:
         print(scoreStatistics)
