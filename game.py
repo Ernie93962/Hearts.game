@@ -64,8 +64,6 @@ while running:
         screen.blit( my_image, (300, 200+(20*i)), (98.4*2, 153*4, 99, 153) )
 
         row,offset = getCardImageLocation(playerHands[0][i])
-        print('Ernie')
-        print(playerHands[0])
         screen.blit( my_image, (500+(20*i), 600), (98.4*offset, 153*row, 99, 153) )
 
 # Done! Time to quit.
