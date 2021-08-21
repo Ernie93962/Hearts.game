@@ -6,8 +6,6 @@ import hearts
 from pygame.constants import K_ESCAPE
 
 keyReady = True
-posx = 500+20
-posy = 520+20
 
 def getCardImageLocation(idx):
     if idx >= 1 and idx <= 13:
@@ -69,16 +67,13 @@ while running:
         screen.blit( my_image, (300, 200+(20*i)), (98.4*2, 153*4, 99, 153) )
 
     for i in range(len(playerHands[0])):
-        '''if posy > 800:
-        posx = 500
-        posy = 520'''
-        posx = 500+(20*i)
-        posy = posx + 20
+        pos1 = 500+(20*i)
+        pos2 = pos1 + 20
         row,offset = getCardImageLocation(playerHands[0][i])
         screen.blit( my_image, (500+(20*i), 600), (98.4*offset, 153*row, 99, 153) )
         #print(pygame.mouse.get_pos())
         if keyReady:
-            if pygame.mouse.get_pos()[0] >= posx and pygame.mouse.get_pos()[0] <= posy:
+            if pygame.mouse.get_pos()[0] >= pos1 and pygame.mouse.get_pos()[0] <= pos2:
                 if pygame.mouse.get_pos()[1] >= 600 and pygame.mouse.get_pos()[1] <= 753:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         playerHands[0].remove(playerHands[0][i])
@@ -87,8 +82,6 @@ while running:
                         break
         if event.type == pygame.MOUSEBUTTONUP:
             keyReady = True
-        posx += 20
-        posy += 20
 
 
 # Done! Time to quit.
