@@ -251,6 +251,7 @@ def getTest():
             #break
 
 def getPlayerHands():
+    player0.sort()
     return(players)
 
 def main():
