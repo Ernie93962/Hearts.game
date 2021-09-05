@@ -200,6 +200,13 @@ def getArguments():
     args = parser.parse_args()
     return(args)
 
+def procGame(aPlayer, isFirstPlayer):
+    if aPlayer == human:
+        return(-1)
+    elif aPlayer != None:
+        AIcard = playCard(players[aPlayer],isFirstPlayer)
+        return(AIcard)
+
 def playGame():
     for pile in trickPiles:
         pile.clear()
@@ -253,6 +260,17 @@ def getTest():
 def getPlayerHands():
     player0.sort()
     return(players)
+
+def initializeGame():
+    for pile in trickPiles:
+        pile.clear()
+    scores.clear()
+    random.seed()
+    playerNames.append('Ernie')
+    cards.initalizeDeck()
+    cards.shuffleDeck(1000)
+    cards.deal(players)
+    cards.passCards(players, human)
 
 def main():
     global human
