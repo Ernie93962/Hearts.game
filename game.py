@@ -10,6 +10,7 @@ cardx = 0
 cardy = 0
 humanPlayedCard = False
 aPlayer = 0
+playerHands = []
 
 def getCardImageLocation(idx):
     if idx >= 1 and idx <= 13:
@@ -33,7 +34,7 @@ pygame.init()
 
 # Set up the drawing window
 #screen = pygame.display.set_mode([0, 0], pygame.FULLSCREEN)
-screen = pygame.display.set_mode([800, 700])
+screen = pygame.display.set_mode([1500, 700])
 
 my_image = pygame.image.load('cards.png').convert()
 
@@ -54,15 +55,21 @@ while running:
     # Flip the display
     pygame.display.flip()
     screen.fill((0,0,0))
+
+    #deal is done once per game
     if deal:
         hearts.initializeGame()
         deal = False
         aPlayer = hearts.getFirstPlayer()
+        if aPlayer == hearts.human:
+           playerHands = hearts.getPlayerHands()
         cardPlayed = hearts.procGame(aPlayer, True)
     else:
         cardPlayed = hearts.procGame(aPlayer, False)
     
     if aPlayer == hearts.human:
+        # wait for human to play card
+        # increment player index by 1
         if humanPlayedCard:
             humanPlayedCard = False
             print(aPlayer)
@@ -72,14 +79,7 @@ while running:
         playerHands = hearts.getPlayerHands()
         aPlayer += 1
 
-
-    for i in range(13):
-        #screen.blit( my_image, (500+(20*i), 50), (98.4*2, 153*4, 99, 153) )
-        #screen.blit( my_image, (500+(20*i), 600), (98.4*2, 153*4, 99, 153) )
-        #screen.blit( my_image, (1000, 200+(20*i)), (98.4*2, 153*4, 99, 153) )
-        #screen.blit( my_image, (300, 200+(20*i)), (98.4*2, 153*4, 99, 153) )
-        pass
-    
+    # draws players hands    
     for i in range(len(playerHands[0])):
         pos1 = 500+(20*i)
         pos2 = pos1 + 20
@@ -97,6 +97,8 @@ while running:
         pos2 = pos1 + 20
         row,offset = getCardImageLocation(playerHands[1][i])
         screen.blit( my_image, (500+(20*i), 50), (98.4*offset, 153*row, 99, 153) )
+
+    # draws our hand    
     for i in range(len(playerHands[3])):
         pos1 = 500+(20*i)
         pos2 = pos1 + 20
@@ -110,11 +112,15 @@ while running:
                         cardx,cardy = getCardImageLocation(playerHands[0][i])
                         keyReady = False
                         humanPlayedCard = True
+                        #TODO: remove card from human hand, put the card in the center
+                            #1. which card was clicked?
+                            #2. remove card from hand
+                            #3. put card in center
                         break
         if event.type == pygame.MOUSEBUTTONUP:
             keyReady = True
 
-       
+    #center cards
     '''screen.blit( my_image, (trick_locationx, trick_locationy), (98.4*2, 153*3, 99, 153) )
     screen.blit( my_image, (trick_locationx + 80, trick_locationy), (98.4*2, 153*3, 99, 153) )
     screen.blit( my_image, (trick_locationx + 30, trick_locationy - 40), (98.4*2, 153*3, 99, 153) )'''
