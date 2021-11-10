@@ -8,6 +8,7 @@ import random
 import argparse
 import sys
 import cardFunc as cards
+import time
 
 theMode = False
 playHearts = False
@@ -28,6 +29,7 @@ human = 3
 scoreStatistics = [0,0,0,0]
 timesRun = 0
 dumbDoug = 0
+currentPlayer = 0
 
 def getLowerThan(target, cardList):
     closestCard = 52
@@ -200,12 +202,54 @@ def getArguments():
     args = parser.parse_args()
     return(args)
 
-def procGame(aPlayer, isFirstPlayer):
-    if aPlayer == human:
-        return(-1)
-    elif aPlayer != None:
-        AIcard = playCard(players[aPlayer],isFirstPlayer)
-        return(AIcard)
+def incrementCurrentPlayer():
+    global currentPlayer
+    if currentPlayer > 2:
+        currentPlayer = 0
+    else:
+        currentPlayer += 1
+
+
+def procGame(dealNewGame):
+    global currentPlayer
+    global currentHand
+
+    isFirstPlayer = False
+
+    if dealNewGame:
+        initializeGame()
+        currentPlayer = getFirstPlayer()
+        isFirstPlayer = True
+
+    if len(currentHand) == 4:
+        print("take a trick")
+        winnerPlayer = findTrickWinner(currentHand)
+        currentHand.clear()
+        currentPlayer = winnerPlayer[0]
+        time.sleep(3)
+
+    if currentPlayer == human:
+        return(True) #Tell UI we need input!
+    else:
+        AIcard = playCard(players[currentPlayer],isFirstPlayer)
+        currentHand.append([currentPlayer,AIcard])
+        incrementCurrentPlayer()
+        return(False)
+
+def getCurrentTrick():
+    return currentHand
+
+def UIplayCard(idx):
+    global currentPlayer
+
+    if currentPlayer == human:
+        if len(currentHand) < 4 and idx < len(players[human]):
+            aCard = players[human][idx]
+            TrickSuite = cards.getTrickSuite(currentHand)
+            if None == TrickSuite or not len(getCardsBySuite(players[human], TrickSuite)) or TrickSuite == cards.getSuite(aCard): 
+                currentHand.append([human,aCard])
+                players[human].remove(aCard)
+                incrementCurrentPlayer()
 
 def playGame():
     for pile in trickPiles:
@@ -258,7 +302,6 @@ def getTest():
             #break
 
 def getPlayerHands():
-    player0.sort()
     return(players)
 
 def initializeGame():
@@ -270,7 +313,7 @@ def initializeGame():
     cards.initalizeDeck()
     cards.shuffleDeck(1000)
     cards.deal(players)
-    cards.passCards(players, human)
+    #cards.passCards(players, human)
 
 def main():
     global human
@@ -289,7 +332,7 @@ def main():
     for i in range(0,args.test+1):
         cards.shuffleDeck(1000)
         cards.deal(players)
-        cards.passCards(players, human)
+        #cards.passCards(players, human)
        # makeDougLose()
         #playGame()
         pass
